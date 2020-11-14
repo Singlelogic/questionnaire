@@ -1,0 +1,9 @@
+db.sqlite3
+.idea/
+*.py[co]
+__pycache__
+media/
+test.py
+.env
+venv/
+staticfiles/
