@@ -12,3 +12,9 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'questionnaire_id')
+
+
+class QuestionnaireSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Questionnaire
+        fields = ('title', 'description', 'date_start', 'date_stop', 'is_active')
