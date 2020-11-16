@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
 
 from .models import Answer, Question, Questionnaire
 from .serializers import AnswerSerializer, QuestionSerializer, QuestionnaireSerializer
@@ -8,6 +9,7 @@ from .serializers import AnswerSerializer, QuestionSerializer, QuestionnaireSeri
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """This is a answer view class that you can use to create, modify, or delete answers."""
+    permission_classes = (IsAdminUser,)
     serializer_class = AnswerSerializer
     queryset = Answer.objects.all()
 
@@ -54,6 +56,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
 class QuestionViewSet(viewsets.ModelViewSet):
     """This is a question viewer class with which you can create, modify or delete questions."""
+    permission_classes = (IsAdminUser,)
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
 
@@ -100,5 +103,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 class QuestionnaireViewSet(viewsets.ModelViewSet):
     """This is a question viewer class with which you can create, modify or delete questions."""
+    permission_classes = (IsAdminUser,)
     serializer_class = QuestionnaireSerializer
     queryset = Questionnaire.objects.all()
