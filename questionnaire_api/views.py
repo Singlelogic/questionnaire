@@ -9,7 +9,7 @@ from .serializers import AnswerSerializer, QuestionSerializer, QuestionnaireSeri
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """This is a answer view class that you can use to create, modify, or delete answers."""
-    permission_classes = (IsAdminUser,)
+    # permission_classes = (IsAdminUser,)
     serializer_class = AnswerSerializer
     queryset = Answer.objects.all()
 
@@ -104,5 +104,11 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class QuestionnaireViewSet(viewsets.ModelViewSet):
     """This is a question viewer class with which you can create, modify or delete questions."""
     permission_classes = (IsAdminUser,)
+    serializer_class = QuestionnaireSerializer
+    queryset = Questionnaire.objects.all()
+
+
+class QuestionnaireActive(viewsets.ReadOnlyModelViewSet):
+# class QuestionnaireActive(viewsets.ModelViewSet):
     serializer_class = QuestionnaireSerializer
     queryset = Questionnaire.objects.all()
