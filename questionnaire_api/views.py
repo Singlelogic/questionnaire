@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -109,5 +111,8 @@ class QuestionnaireViewSet(viewsets.ModelViewSet):
 
 
 class QuestionnaireActive(viewsets.ReadOnlyModelViewSet):
+    """This view class to get all active polls."""
     serializer_class = QuestionnaireSerializer
-    queryset = Questionnaire.objects.all()
+    queryset = Questionnaire.objects.filter(
+        date_start__lte=date.today()).filter(
+        date_stop__gte=date.today())
