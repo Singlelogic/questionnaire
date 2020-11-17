@@ -109,6 +109,5 @@ class QuestionnaireViewSet(viewsets.ModelViewSet):
 
 
 class QuestionnaireActive(viewsets.ReadOnlyModelViewSet):
-# class QuestionnaireActive(viewsets.ModelViewSet):
     serializer_class = QuestionnaireSerializer
     queryset = Questionnaire.objects.all()
