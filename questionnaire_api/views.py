@@ -40,7 +40,11 @@ class QuestionnaireViewSet(viewsets.ModelViewSet):
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-    """This is a question viewer class with which you can create, modify or delete questions."""
+    """This class represents questions.
+
+    Allows administrators to create, edit and delete questions.
+    All users can get questions and options for answers to these questions.
+    """
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
