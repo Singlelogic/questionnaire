@@ -47,4 +47,6 @@ class AnsewrUser(models.Model):
     choice_answer = models.ManyToManyField(Answer)
 
     def __str__(self):
-        return f"{self.user_id}: {self.user_answer}"
+        if self.text_answer:
+            return f"{self.user_id}: {self.text_answer}"
+        return f"{self.user_id}: {', '.join(map(str, self.choice_answer.all()))}"
