@@ -7,7 +7,6 @@ class Questionnaire(models.Model):
     description = models.TextField()
     date_start = models.DateField(null=True, blank=True)
     date_stop = models.DateField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -38,3 +37,13 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class AnsewrUser(models.Model):
+    """This class contains user answers to questions."""
+    user_id = models.IntegerField()
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user_answer = models.CharField(max_length=500, null=False)
+
+    def __str__(self):
+        return f"{self.user_id}: {self.user_answer}"
