@@ -43,7 +43,8 @@ class AnsewrUser(models.Model):
     """This class contains user answers to questions."""
     user_id = models.IntegerField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    user_answer = models.CharField(max_length=500, null=False)
+    text_answer = models.CharField(max_length=500, null=False)
+    choice_answer = models.ManyToManyField(Answer)
 
     def __str__(self):
         return f"{self.user_id}: {self.user_answer}"
