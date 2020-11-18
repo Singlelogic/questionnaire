@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    AnswerViewSet, QuestionViewSet, QuestionnaireViewSet
+    AnswerViewSet, AnswerUserViewSet, QuestionViewSet, QuestionnaireViewSet
 )
 
 urlpatterns = [
@@ -13,5 +13,6 @@ router = DefaultRouter()
 router.register(r'answer', AnswerViewSet, basename='answer')
 router.register(r'question', QuestionViewSet, basename='question')
 router.register(r'questionnaire', QuestionnaireViewSet, basename='questionnaire')
+router.register(r'answer_user', AnswerUserViewSet, basename='answer_user')
 
 urlpatterns.extend(router.urls)

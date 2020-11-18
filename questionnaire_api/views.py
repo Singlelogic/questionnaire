@@ -5,9 +5,12 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
-from .models import Answer, Question, Questionnaire
+from .models import Answer, AnsewrUser, Question, Questionnaire
 from .permissions import IsAdminOrReadOnly
-from .serializers import AnswerSerializer, QuestionSerializer, QuestionnaireSerializer
+from .serializers import (
+    AnswerSerializer, AnswerUserSerializer, QuestionSerializer,
+    QuestionnaireSerializer,
+)
 
 
 class QuestionnaireViewSet(viewsets.ModelViewSet):
@@ -142,4 +145,41 @@ class AnswerViewSet(viewsets.ModelViewSet):
             return super().destroy(request, *args, **kwargs)
         return Response({
             "message": "After specifying the start date of the survey, you cannot delete answers."
+        }, status=403)
+
+
+class AnswerUserViewSet(viewsets.ModelViewSet):
+    """This class contains user responses to questions."""
+    serializer_class = AnswerUserSerializer
+    queryset = AnsewrUser.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        """Method for creating answer for questions."""
+        question = Question.objects.get(id=request.data['question'])
+        type_question = question.type
+        # print()
+        # print(request.data.get('text_answer'))
+        # print()
+        # print(request.data.get('choice_answer'))
+        # print()
+        # print(type_question)
+        # print()
+        # print(type(type_question))
+        # print()
+        if request.data.get('text_answer') and request.data.get('choice_answer'):
+            return Response({
+                "message": "It is forbidden to answer simultaneously with the text and the choice of answers."
+            }, status=406)
+        elif request.data.get('text_answer') and type_question == 1:
+            return super().create(request, *args, **kwargs)
+        elif len(request.data.get('choice_answer')) == 1 and type_question == 2:
+            return super().create(request, *args, **kwargs)
+        elif len(request.data.get('choice_answer')) > 1 and type_question == 2:
+            return Response({
+                "message": "This question requires only one answer option."
+            }, status=406)
+        elif len(request.data.get('choice_answer')) > 1 and type_question == 3:
+            return super().create(request, *args, **kwargs)
+        return Response({
+            "message": "The question must be answered."
         }, status=403)

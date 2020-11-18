@@ -44,7 +44,7 @@ class AnsewrUser(models.Model):
     user_id = models.IntegerField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     text_answer = models.CharField(max_length=500, blank=True)
-    choice_answer = models.ManyToManyField(Answer)
+    choice_answer = models.ManyToManyField(Answer, blank=True)
 
     def __str__(self):
         if self.text_answer:
