@@ -85,6 +85,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
             "message": "After specifying the start date of the survey, you cannot delete questions."
         }, status=403)
 
+    @action(detail=True)
+    def answers(self, request, pk=None):
+        """This method for getting answers on a specific question."""
+        question = Question.objects.get(pk=pk)
+        answers = Answer.objects.filter(question=question)
+        serializer = AnswerSerializer(answers, many=True)
+        return Response(serializer.data)
+
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """This is a answer view class that you can use to create, modify, or delete answers."""
