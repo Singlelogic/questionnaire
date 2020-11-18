@@ -12,6 +12,9 @@ class Questionnaire(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-date_start']
+
 
 class Question(models.Model):
     """This class contains questions for surveys."""
