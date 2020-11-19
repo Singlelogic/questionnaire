@@ -166,8 +166,22 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def _is_valid_answer(request, type_question):
-        """Checking the answer by question type."""
-        if request.data.get('text_answer') and request.data.get('choice_answer'):
+        """Checking the user's response.
+
+        It checks whether the user has ever answered this question and,
+        if he did not answer, whether the answer matches the type of question.
+        Question types:
+        1. Reply in text
+        2. Answer with a choice of one option
+        3. Multiple choice answer"""
+        user_id = request.data.get('user_id')
+        question_id = request.data.get('question')
+        is_already_answer = AnsewrUser.objects.filter(
+            user_id=user_id).filter(question_id=question_id)
+
+        if is_already_answer:
+            return "The user already has an answer to this question."
+        elif request.data.get('text_answer') and request.data.get('choice_answer'):
             return "It is forbidden to answer simultaneously with the text and the choice of answers."
         elif request.data.get('text_answer') and (type_question == 2 or type_question == 3):
             return "There should be no textual response."
@@ -178,4 +192,3 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
                 return "This question requires only one answer option."
         elif not request.data.get('text_answer') and not request.data.get('choice_answer'):
             return "The question must be answered."
-
