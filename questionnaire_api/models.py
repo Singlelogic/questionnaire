@@ -48,5 +48,5 @@ class AnsewrUser(models.Model):
 
     def __str__(self):
         if self.text_answer:
-            return f"{self.user_id}: {self.text_answer}"
-        return f"{self.user_id}: {', '.join(map(str, self.choice_answer.all()))}"
+            return self.text_answer
+        return f"{', '.join(map(str, self.choice_answer.all()))}"

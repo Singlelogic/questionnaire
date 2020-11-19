@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date
 
 from rest_framework import viewsets
@@ -173,7 +174,8 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
         Question types:
         1. Reply in text
         2. Answer with a choice of one option
-        3. Multiple choice answer"""
+        3. Multiple choice answer
+        """
         user_id = request.data.get('user_id')
         question_id = request.data.get('question')
         is_already_answer = AnsewrUser.objects.filter(
@@ -192,3 +194,22 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
                 return "This question requires only one answer option."
         elif not request.data.get('text_answer') and not request.data.get('choice_answer'):
             return "The question must be answered."
+
+    @action(detail=True)
+    def get_user_responses(self, request, pk=None):
+        """Retrieve user responses to survey questions."""
+        answers = AnsewrUser.objects.filter(user_id=pk)
+
+        result = defaultdict(dict)
+
+        for answer in answers:
+            answer_s = str(answer)
+            question_s = str(answer.question)
+            questionnaire_s = str(answer.question.questionnaire)
+
+            if result[questionnaire_s].get(question_s):
+                result[questionnaire_s][question_s].append(answer_s)
+            else:
+                result[questionnaire_s][question_s] = [answer_s]
+
+        return Response(result)
