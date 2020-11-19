@@ -9,7 +9,7 @@ class Questionnaire(models.Model):
     date_stop = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.description
 
     class Meta:
         ordering = ['-date_start']
