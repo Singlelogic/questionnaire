@@ -157,29 +157,24 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
         """Method for creating answer for questions."""
         question = Question.objects.get(id=request.data['question'])
         type_question = question.type
-        # print()
-        # print(request.data.get('text_answer'))
-        # print()
-        # print(request.data.get('choice_answer'))
-        # print()
-        # print(type_question)
-        # print()
-        # print(type(type_question))
-        # print()
-        if request.data.get('text_answer') and request.data.get('choice_answer'):
-            return Response({
-                "message": "It is forbidden to answer simultaneously with the text and the choice of answers."
-            }, status=406)
-        elif request.data.get('text_answer') and type_question == 1:
-            return super().create(request, *args, **kwargs)
-        elif len(request.data.get('choice_answer')) == 1 and type_question == 2:
-            return super().create(request, *args, **kwargs)
-        elif len(request.data.get('choice_answer')) > 1 and type_question == 2:
-            return Response({
-                "message": "This question requires only one answer option."
-            }, status=406)
-        elif len(request.data.get('choice_answer')) > 1 and type_question == 3:
+        message = self._is_valid_answer(request, type_question)
+        if not message:
             return super().create(request, *args, **kwargs)
         return Response({
-            "message": "The question must be answered."
+            "message": f"{message}"
         }, status=403)
+
+    @staticmethod
+    def _is_valid_answer(request, type_question):
+        if request.data.get('text_answer') and request.data.get('choice_answer'):
+            return "It is forbidden to answer simultaneously with the text and the choice of answers."
+        elif request.data.get('text_answer') and (type_question == 2 or type_question == 3):
+            return "There should be no textual response."
+        elif request.data.get('choice_answer') and type_question == 1:
+            return "The answer must be text."
+        elif request.data.get('choice_answer'):
+            if len(request.data.get('choice_answer')) > 1 and type_question == 2:
+                return "This question requires only one answer option."
+        elif  not request.data.get('text_answer') and not request.data.get('choice_answer'):
+            return "The question must be answered."
+
