@@ -166,6 +166,7 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def _is_valid_answer(request, type_question):
+        """Checking the answer by question type."""
         if request.data.get('text_answer') and request.data.get('choice_answer'):
             return "It is forbidden to answer simultaneously with the text and the choice of answers."
         elif request.data.get('text_answer') and (type_question == 2 or type_question == 3):
@@ -175,6 +176,6 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
         elif request.data.get('choice_answer'):
             if len(request.data.get('choice_answer')) > 1 and type_question == 2:
                 return "This question requires only one answer option."
-        elif  not request.data.get('text_answer') and not request.data.get('choice_answer'):
+        elif not request.data.get('text_answer') and not request.data.get('choice_answer'):
             return "The question must be answered."
 
