@@ -45,7 +45,11 @@ class LoginAPIView(APIView):
         Email and password are required.
         Returns a JSON web token.
         """
+        # print(request.data)
         serializer = self.serializer_class(data=request.data)
+        # print(serializer)
+        # print(type(serializer))
         serializer.is_valid(raise_exception=True)
-
+        # print(serializer)
+        # print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
