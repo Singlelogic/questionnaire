@@ -98,6 +98,7 @@ http://127.0.0.1:8000/api/question/int:pk/answers/
 ```
 ###### int:pk - ID вопроса
 - Прохождение опроса<br>
+
 Опросы можно проходить анонимно, в качестве идентификатора пользователя в API передается числовой ID.<br>
 Отправляем POST запрос
 ```
@@ -134,6 +135,7 @@ choice_answer - выбранный ответ из вариантов ответ
 http://127.0.0.1:8000/api/answer_user/int:pk/get_user_responses
 ```
 ###### int:pk - ID опроса
+***
 
 ### Для установки открываем терминал и поочередно вводим следующие команды:
 1. git clone https://github.com/Singlelogic/questionnaire.git
