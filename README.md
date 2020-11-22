@@ -144,7 +144,5 @@ http://127.0.0.1:8000/api/answer_user/int:pk/get_user_responses
 4. source ./venv/bin/activate
 5. pip install -r requirements.txt
 6. python manage.py migrate
-7. python manage.py runserver
-
-В адресной строке браузера вводим:
-http://127.0.0.1:8000/
+7. python manage.py createsuperuser
+8. python manage.py runserver
