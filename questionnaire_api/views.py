@@ -58,12 +58,16 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
         If the questionnaire has a start date for the survey, it is prohibited to add new questions.
         """
-        questionnaire = Questionnaire.objects.get(id=request.data['questionnaire_id'])
-        if not questionnaire.date_start:
-            return super().create(request, *args, **kwargs)
+        if request.data.get('questionnaire_id'):
+            questionnaire = Questionnaire.objects.get(id=request.data['questionnaire_id'])
+            if not questionnaire.date_start:
+                return super().create(request, *args, **kwargs)
+            return Response({
+                "message": "After specifying the start date of the survey, you cannot create new questions."
+            }, status=403)
         return Response({
-            "message": "After specifying the start date of the survey, you cannot create new questions."
-        }, status=403)
+            "message": "No 'questionnaire_id' specified."
+        }, status=406)
 
     def perform_create(self, serializer):
         obj = get_object_or_404(Questionnaire, id=self.request.data.get('questionnaire_id'))
@@ -113,12 +117,20 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
         If the questionnaire has a start date for the survey, it is prohibited to add new answers.
         """
-        question = Question.objects.get(id=request.data['question_id'])
-        if not question.questionnaire.date_start:
-            return super().create(request, *args, **kwargs)
+        if request.data.get('question_id'):
+            question = Question.objects.get(id=request.data['question_id'])
+            if not question.questionnaire.date_start:
+                if question.type > 1:
+                    return super().create(request, *args, **kwargs)
+                return Response({
+                    "message": "This type of question requires a text answer."
+                }, status=406)
+            return Response({
+                "message": "After specifying the start date of the survey, you cannot create new answers."
+            }, status=403)
         return Response({
-            "message": "After specifying the start date of the survey, you cannot create new answers."
-        }, status=403)
+            "message": "No 'question_id' specified."
+        }, status=406)
 
     def perform_create(self, serializer):
         obj = get_object_or_404(Question, id=self.request.data.get('question_id'))
@@ -156,14 +168,18 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """Method for creating answer for questions."""
-        question = Question.objects.get(id=request.data['question'])
-        type_question = question.type
-        message = self._is_valid_answer(request, type_question)
-        if not message:
-            return super().create(request, *args, **kwargs)
+        if request.data.get('question'):
+            question = Question.objects.get(id=request.data['question'])
+            type_question = question.type
+            message = self._is_valid_answer(request, type_question)
+            if not message:
+                return super().create(request, *args, **kwargs)
+            return Response({
+                "message": f"{message}"
+            }, status=403)
         return Response({
-            "message": f"{message}"
-        }, status=403)
+            "message": "No 'question' specified."
+        }, status=406)
 
     @staticmethod
     def _is_valid_answer(request, type_question):
