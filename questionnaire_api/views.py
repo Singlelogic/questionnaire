@@ -56,14 +56,16 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         """Method for creating questions.
 
-        If the questionnaire has a start date for the survey, it is prohibited to add new questions.
+        If the questionnaire has a start date for the survey,
+        it is prohibited to add new questions.
         """
         if request.data.get('questionnaire_id'):
             questionnaire = Questionnaire.objects.get(id=request.data['questionnaire_id'])
             if not questionnaire.date_start:
                 return super().create(request, *args, **kwargs)
             return Response({
-                "message": "After specifying the start date of the survey, you cannot create new questions."
+                "message": "After specifying the start date of the survey, "
+                           "you cannot create new questions."
             }, status=403)
         return Response({
             "message": "No 'questionnaire_id' specified."
@@ -82,7 +84,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if not self.get_object().questionnaire.date_start:
             return super().update(request, *args, **kwargs)
         return Response({
-            "message": "After specifying the start date for the survey, you cannot change the questions."
+            "message": "After specifying the start date for the survey, "
+                       "you cannot change the questions."
         }, status=403)
 
     def destroy(self, request, *args, **kwargs):
@@ -94,7 +97,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
         if not self.get_object().questionnaire.date_start:
             return super().destroy(request, *args, **kwargs)
         return Response({
-            "message": "After specifying the start date of the survey, you cannot delete questions."
+            "message": "After specifying the start date of the survey, "
+                       "you cannot delete questions."
         }, status=403)
 
     @action(detail=True)
@@ -126,7 +130,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
                     "message": "This type of question requires a text answer."
                 }, status=406)
             return Response({
-                "message": "After specifying the start date of the survey, you cannot create new answers."
+                "message": "After specifying the start date of the survey, "
+                           "you cannot create new answers."
             }, status=403)
         return Response({
             "message": "No 'question_id' specified."
@@ -145,7 +150,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
         if not self.get_object().question.questionnaire.date_start:
             return super().update(request, *args, **kwargs)
         return Response({
-            "message": "After specifying the start date for the survey, you cannot change the answers."
+            "message": "After specifying the start date for the survey, "
+                       "you cannot change the answers."
         }, status=403)
 
     def destroy(self, request, *args, **kwargs):
@@ -157,7 +163,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
         if not self.get_object().question.questionnaire.date_start:
             return super().destroy(request, *args, **kwargs)
         return Response({
-            "message": "After specifying the start date of the survey, you cannot delete answers."
+            "message": "After specifying the start date of the survey, "
+                       "you cannot delete answers."
         }, status=403)
 
 
@@ -200,8 +207,9 @@ class AnswerUserViewSet(viewsets.ModelViewSet):
         if is_already_answer:
             return "The user already has an answer to this question."
         elif request.data.get('text_answer') and request.data.get('choice_answer'):
-            return "It is forbidden to answer simultaneously with the text and the choice of answers."
-        elif request.data.get('text_answer') and (type_question == 2 or type_question == 3):
+            return "It is forbidden to answer simultaneously " \
+                   "with the text and the choice of answers."
+        elif request.data.get('text_answer') and type_question in (2, 3):
             return "There should be no textual response."
         elif request.data.get('choice_answer') and type_question == 1:
             return "The answer must be text."
