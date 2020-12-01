@@ -7,9 +7,9 @@ from .views import (
 
 urlpatterns = [
     path("questionnaire/active/",
-         QuestionnaireViewSet.as_view({'get': 'active'}, name='questionnaire_active')),
+         QuestionnaireViewSet.as_view({'get': 'active'}), name='questionnaire_active'),
     path("get_user_responses/<pk>/",
-         AnswerUserViewSet.as_view({'get': 'get_user_responses'}, name='get_user_responses'))
+         AnswerUserViewSet.as_view({'get': 'get_user_responses'}), name='get_user_responses')
 ]
 
 router = DefaultRouter()
