@@ -141,12 +141,13 @@ http://127.0.0.1:8000/api/answer_user/int:pk/get_user_responses
 ###### int:pk - ID опроса
 ***
 
-### Для установки открываем терминал и поочередно вводим следующие команды:
+### Для установки и проверки, открываем терминал и поочередно вводим следующие команды:
 1. git clone https://github.com/Singlelogic/questionnaire.git
 2. cd ./questionnaire
 3. python3.8 -m venv ./venv
 4. source ./venv/bin/activate
 5. pip install -r requirements.txt
 6. python manage.py migrate
-7. python manage.py createsuperuser
-8. python manage.py runserver
+7. python manage.py test questionnaire_api.tests
+8. python manage.py createsuperuser
+9. python manage.py runserver
